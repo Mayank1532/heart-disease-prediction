@@ -90,6 +90,7 @@ class DataTransformation:
                 y,
                 test_size=self.config.test_size,
                 random_state=self.config.random_state,
+                stratify=y,
             )
 
             logger.info(f"X_train shape : {X_train.shape}")

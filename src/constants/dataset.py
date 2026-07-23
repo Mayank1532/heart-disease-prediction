@@ -1,29 +1,18 @@
-TARGET_COLUMN = "Price_euros"
+TARGET_COLUMN = "HeartDisease"
 
 NUMERICAL_COLUMNS = [
-    "Inches",
-    "Ram",
-    "Weight",
-    "ScreenW",
-    "ScreenH",
-    "CPU_freq",
-    "PrimaryStorage",
-    "SecondaryStorage",
+    "Age",
+    "RestingBP",
+    "Cholesterol",
+    "FastingBS",
+    "MaxHR",
+    "Oldpeak",
 ]
 
 CATEGORICAL_COLUMNS = [
-    "Company",
-    "Product",
-    "TypeName",
-    "OS",
-    "Screen",
-    "Touchscreen",
-    "IPSpanel",
-    "RetinaDisplay",
-    "CPU_company",
-    "CPU_model",
-    "PrimaryStorageType",
-    "SecondaryStorageType",
-    "GPU_company",
-    "GPU_model",
+    "Sex",
+    "ChestPainType",
+    "RestingECG",
+    "ExerciseAngina",
+    "ST_Slope",
 ]

@@ -32,10 +32,19 @@ class DataIngestion:
 
             logger.info("Copying dataset to raw directory...")
 
-            shutil.copy2(
-                source_file,
-                self.config.raw_data_path,
-            )
+            if source_file.resolve() != self.config.raw_data_path.resolve():
+                shutil.copy2(
+                    source_file,
+                    self.config.raw_data_path,
+                )
+                logger.info(
+                    "Dataset copied successfully to: %s",
+                    self.config.raw_data_path,
+                )
+            else:
+                logger.info(
+                    "Dataset already exists in raw directory. Skipping copy."
+                )
 
             logger.info(f"Dataset copied successfully to: {self.config.raw_data_path}")
 
