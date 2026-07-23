@@ -2,15 +2,21 @@
 
 A production-ready Machine Learning application for heart disease prediction built with **FastAPI**, **Scikit-learn**, **UV**, **MLflow**, **Docker**, and **GitHub Actions**. The project demonstrates an end-to-end MLOps workflow, from data ingestion and model training to experiment tracking, API deployment, automated testing, and CI/CD.
 
-![Python](https://img.shields.io/badge/Python-3.12-blue.svg)
-![UV](https://img.shields.io/badge/Package%20Manager-UV-6A5ACD)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.116-009688.svg)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange.svg)
-![MLflow](https://img.shields.io/badge/MLflow-Experiment%20Tracking-blue.svg)
-![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED.svg)
-![Pytest](https://img.shields.io/badge/Tests-Pytest-success.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python)
 
+![UV](https://img.shields.io/badge/UV-Package%20Manager-6A5ACD)
+
+![FastAPI](https://img.shields.io/badge/FastAPI-0.116-009688?logo=fastapi)
+
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-orange?logo=scikitlearn)
+
+![MLflow](https://img.shields.io/badge/MLflow-Experiment%20Tracking-0194E2)
+
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)
+
+![Pytest](https://img.shields.io/badge/Tests-Pytest-success?logo=pytest)
+
+![License](https://img.shields.io/badge/License-MIT-green)
 
 # 📖 Project Overview
 
