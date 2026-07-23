@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-from pathlib import Path
 
 
-@dataclass(frozen=True)
+@dataclass
 class ModelTrainerArtifact:
-    model_path: Path
+    model_path: str
     model_name: str
-    train_r2_score: float
-    test_r2_score: float
+    train_accuracy: float
+    test_accuracy: float

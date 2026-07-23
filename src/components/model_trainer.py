@@ -5,21 +5,21 @@ import mlflow.sklearn
 import pandas as pd
 from mlflow.models import infer_signature
 from sklearn.ensemble import (
-    GradientBoostingRegressor,
-    RandomForestRegressor,
+    GradientBoostingClassifier,
+    RandomForestClassifier,
 )
-from sklearn.linear_model import (
-    Lasso,
-    LinearRegression,
-    Ridge,
-)
+
+from sklearn.linear_model import LogisticRegression
+
 from sklearn.metrics import (
-    mean_absolute_error,
-    r2_score,
-    root_mean_squared_error,
+    accuracy_score,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
 )
-from sklearn.model_selection import GridSearchCV
-from sklearn.tree import DecisionTreeRegressor
+
+from sklearn.tree import DecisionTreeClassifier
 
 from src.config import ModelTrainerConfig
 from src.entity import (
@@ -46,33 +46,26 @@ class ModelTrainer:
     # Models
     ###########################################################################
 
-    def _get_models(self) -> dict[str, Any]:
-        """
-        Return regression models.
-        """
-        try:
-            logger.info("Initializing regression models...")
-
-            return {
-                "Linear Regression": LinearRegression(),
-                "Ridge": Ridge(),
-                "Lasso": Lasso(
-                    max_iter=10000,
-                ),
-                "Decision Tree": DecisionTreeRegressor(
-                    random_state=self.config.random_state,
-                ),
-                "Random Forest": RandomForestRegressor(
-                    random_state=self.config.random_state,
-                ),
-                "Gradient Boosting": GradientBoostingRegressor(
-                    random_state=self.config.random_state,
-                ),
-            }
-
-        except Exception as e:
-            logger.exception("Model initialization failed.")
-            raise CustomException(e, sys) from e
+    def _get_model_params(self) -> dict[str, dict]:
+        return {
+        "Logistic Regression": {
+            "C": [0.01, 0.1, 1, 10],
+        },
+        "Decision Tree": {
+            "max_depth": [5, 10, 20],
+            "min_samples_split": [2, 5, 10],
+        },
+        "Random Forest": {
+            "n_estimators": [100, 200],
+            "max_depth": [10, 20],
+            "min_samples_split": [2, 5],
+        },
+        "Gradient Boosting": {
+            "learning_rate": [0.01, 0.1],
+            "n_estimators": [100, 200],
+            "max_depth": [3, 5],
+        },
+    }
 
     ###########################################################################
     # Hyperparameters
@@ -145,7 +138,7 @@ class ModelTrainer:
                 estimator=model,
                 param_grid=parameter_grid,
                 cv=5,
-                scoring="r2",
+                scoring="f1",
                 n_jobs=-1,
             )
 
@@ -206,34 +199,49 @@ class ModelTrainer:
 
                 predictions = tuned_model.predict(X_test)
 
-                r2 = r2_score(
+                accuracy = accuracy_score(
                     y_test,
                     predictions,
                 )
 
-                mae = mean_absolute_error(
+                precision = precision_score(
                     y_test,
                     predictions,
                 )
 
-                rmse = root_mean_squared_error(
+                recall = recall_score(
+                    y_test,
+                    predictions,
+                )
+
+                f1 = f1_score(
+                    y_test,
+                    predictions,
+                )
+
+                roc_auc = roc_auc_score(
                     y_test,
                     predictions,
                 )
 
                 evaluation_results[model_name] = ModelEvaluationResult(
-                    model=tuned_model,
-                    r2=r2,
-                    mae=mae,
-                    rmse=rmse,
-                )
-                logger.info(
-                    "%s | R²: %.4f | MAE: %.4f | RMSE: %.4f",
-                    model_name,
-                    r2,
-                    mae,
-                    rmse,
-                )
+                model=tuned_model,
+                accuracy=accuracy,
+                precision=precision,
+                recall=recall,
+                f1=f1,
+                roc_auc=roc_auc,
+            )
+
+            logger.info(
+                "%s | Accuracy: %.4f | Precision: %.4f | Recall: %.4f | F1: %.4f | ROC-AUC: %.4f",
+                model_name,
+                accuracy,
+                precision,
+                recall,
+                f1,
+                roc_auc,
+            )
 
             logger.info("=" * 80)
             logger.info("All models evaluated successfully.")
@@ -404,10 +412,12 @@ class ModelTrainer:
 
             mlflow_manager.log_metrics(
                 {
-                    "train_r2": train_r2,
-                    "test_r2": best_result.r2,
-                    "mae": best_result.mae,
-                    "rmse": best_result.rmse,
+                    "train_accuracy": train_accuracy,
+                    "test_accuracy": best_result.accuracy,
+                    "precision": best_result.precision,
+                    "recall": best_result.recall,
+                    "f1_score": best_result.f1,
+                    "roc_auc": best_result.roc_auc,
                 }
             )
             # ===========================
@@ -435,7 +445,7 @@ class ModelTrainer:
 
             mlflow_manager.register_model(
                 model_uri=f"runs:/{run.info.run_id}/model",
-                model_name="LaptopPricePrediction",
+                model_name="HeartDiseasePrediction",
             )
 
             ############################################################
@@ -443,16 +453,16 @@ class ModelTrainer:
             ############################################################
 
             trainer_artifact = ModelTrainerArtifact(
-                model_path=self.config.trained_model_path,
-                model_name=best_model_name,
-                train_r2_score=train_r2,
-                test_r2_score=best_result.r2,
-            )
+            model_path=self.config.trained_model_path,
+            model_name=best_model_name,
+            train_accuracy=train_accuracy,
+            test_accuracy=best_result.accuracy,
+        )
 
             logger.info("Training completed successfully.")
             logger.info("Best Model : %s", best_model_name)
-            logger.info("Train R² : %.4f", train_r2)
-            logger.info("Test R² : %.4f", best_result.r2)
+            logger.info("Train Accuracy : %.4f", train_accuracy)
+            logger.info("Test Accuracy : %.4f", best_result.accuracy)
             logger.info("=" * 100)
 
             return trainer_artifact

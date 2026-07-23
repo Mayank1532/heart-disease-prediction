@@ -6,5 +6,5 @@ from .paths import PROJECT_ROOT, RAW_DATA_DIR
 
 @dataclass(frozen=True)
 class DataValidationConfig:
-    raw_data_path: Path = RAW_DATA_DIR / "laptop_prices.csv"
+    raw_data_path: Path = RAW_DATA_DIR / "heart_disease.csv"
     schema_path: Path = PROJECT_ROOT / "config" / "schema.yaml"
