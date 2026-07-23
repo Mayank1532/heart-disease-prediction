@@ -1,6 +1,6 @@
 # ❤️ Heart Disease Prediction API
 
-A production-ready Machine Learning application that predicts the likelihood of heart disease using clinical patient data. The project follows modern MLOps practices with a modular architecture, experiment tracking, REST API deployment, containerization, automated testing, and CI/CD.
+A production-ready Machine Learning application for heart disease prediction built with **FastAPI**, **Scikit-learn**, **UV**, **MLflow**, **Docker**, and **GitHub Actions**. The project demonstrates an end-to-end MLOps workflow, from data ingestion and model training to experiment tracking, API deployment, automated testing, and CI/CD.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue.svg)
 ![UV](https://img.shields.io/badge/Package%20Manager-UV-6A5ACD)
