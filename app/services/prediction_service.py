@@ -15,4 +15,4 @@ class PredictionService:
 
         prediction = self.pipeline.predict(df)
 
-        return float(prediction[0])
+        return int(prediction[0])

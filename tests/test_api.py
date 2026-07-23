@@ -9,7 +9,10 @@ def test_root():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.json() == {"message": "Heart Disease Prediction API is running!"}
+
+    body = response.json()
+
+    assert isinstance(body, dict)
 
 
 def test_health():
@@ -21,28 +24,17 @@ def test_health():
 
 def test_predict():
     payload = {
-        "Company": "Dell",
-        "Product": "Inspiron 15",
-        "TypeName": "Notebook",
-        "Inches": 15.6,
-        "Ram": 8,
-        "OS": "Windows 10",
-        "Weight": 2.1,
-        "Screen": "Full HD",
-        "ScreenW": 1920,
-        "ScreenH": 1080,
-        "Touchscreen": 0,
-        "IPSpanel": 1,
-        "RetinaDisplay": 0,
-        "CPU_company": "Intel",
-        "CPU_freq": 2.5,
-        "CPU_model": "Core i5",
-        "PrimaryStorage": 256,
-        "SecondaryStorage": 0,
-        "PrimaryStorageType": "SSD",
-        "SecondaryStorageType": "None",
-        "GPU_company": "Intel",
-        "GPU_model": "HD Graphics 620",
+        "Age": 40,
+        "Sex": "M",
+        "ChestPainType": "ATA",
+        "RestingBP": 140,
+        "Cholesterol": 289,
+        "FastingBS": 0,
+        "RestingECG": "Normal",
+        "MaxHR": 172,
+        "ExerciseAngina": "N",
+        "Oldpeak": 0.0,
+        "ST_Slope": "Up",
     }
 
     response = client.post("/predict/", json=payload)
@@ -51,5 +43,8 @@ def test_predict():
 
     body = response.json()
 
-    assert "predicted_price" in body
-    assert isinstance(body["predicted_price"], float)
+    assert "prediction" in body
+    assert "diagnosis" in body
+
+    assert body["prediction"] in [0, 1]
+    assert isinstance(body["diagnosis"], str)

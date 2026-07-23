@@ -1,4 +1,6 @@
-from sklearn.linear_model import LinearRegression
+from pathlib import Path
+
+from sklearn.linear_model import LogisticRegression
 
 from src.components import DataTransformation, ModelTrainer
 from src.config import DataTransformationConfig, ModelTrainerConfig
@@ -21,7 +23,7 @@ def test_get_models():
 
     assert isinstance(models, dict)
     assert len(models) > 0
-    assert "Linear Regression" in models
+    assert "Logistic Regression" in models
     assert "Random Forest" in models
 
 
@@ -45,15 +47,18 @@ def test_evaluate_models():
     assert isinstance(results, dict)
     assert len(results) > 0
 
-    assert "Linear Regression" in results
+    assert "Logistic Regression" in results
 
-    result = results["Linear Regression"]
+    result = results["Logistic Regression"]
 
     assert isinstance(result, ModelEvaluationResult)
     assert result.model is not None
-    assert isinstance(result.r2, float)
-    assert isinstance(result.mae, float)
-    assert isinstance(result.rmse, float)
+
+    assert isinstance(result.accuracy, float)
+    assert isinstance(result.precision, float)
+    assert isinstance(result.recall, float)
+    assert isinstance(result.f1, float)
+    assert isinstance(result.roc_auc, float)
 
 
 def test_select_best_model():
@@ -82,9 +87,11 @@ def test_select_best_model():
 
     assert isinstance(result, ModelEvaluationResult)
 
-    assert isinstance(result.r2, float)
-    assert isinstance(result.mae, float)
-    assert isinstance(result.rmse, float)
+    assert isinstance(result.accuracy, float)
+    assert isinstance(result.precision, float)
+    assert isinstance(result.recall, float)
+    assert isinstance(result.f1, float)
+    assert isinstance(result.roc_auc, float)
 
 
 def test_save_model(tmp_path):
@@ -95,7 +102,7 @@ def test_save_model(tmp_path):
         )
     )
 
-    model = trainer._get_models()["Linear Regression"]
+    model = trainer._get_models()["Logistic Regression"]
 
     trainer._save_model(model)
 
@@ -103,7 +110,7 @@ def test_save_model(tmp_path):
 
     loaded_model = load_pickle(tmp_path / "model.pkl")
 
-    assert isinstance(loaded_model, LinearRegression)
+    assert isinstance(loaded_model, LogisticRegression)
 
 
 def test_initiate_model_trainer():
@@ -117,7 +124,8 @@ def test_initiate_model_trainer():
 
     print("Training completed")
 
-    assert trainer_artifact.model_path.exists()
+    assert Path(trainer_artifact.model_path).exists()
     assert trainer_artifact.model_name != ""
-    assert trainer_artifact.train_r2_score is not None
-    assert trainer_artifact.test_r2_score is not None
+
+    assert isinstance(trainer_artifact.train_accuracy, float)
+    assert isinstance(trainer_artifact.test_accuracy, float)

@@ -1,26 +1,15 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class PredictionRequest(BaseModel):
-    Company: str
-    Product: str
-    TypeName: str
-    Inches: float
-    Ram: int
-    OS: str
-    Weight: float
-    Screen: str
-    ScreenW: int
-    ScreenH: int
-    Touchscreen: int
-    IPSpanel: int
-    RetinaDisplay: int
-    CPU_company: str
-    CPU_freq: float
-    CPU_model: str
-    PrimaryStorage: int
-    SecondaryStorage: int
-    PrimaryStorageType: str
-    SecondaryStorageType: str
-    GPU_company: str
-    GPU_model: str
+    Age: int = Field(..., ge=1, le=120)
+    Sex: str
+    ChestPainType: str
+    RestingBP: int = Field(..., ge=0)
+    Cholesterol: int = Field(..., ge=0)
+    FastingBS: int
+    RestingECG: str
+    MaxHR: int = Field(..., ge=0)
+    ExerciseAngina: str
+    Oldpeak: float
+    ST_Slope: str

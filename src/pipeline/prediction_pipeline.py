@@ -52,65 +52,43 @@ class PredictPipeline:
 @dataclass
 class CustomData:
     """
-    Represents a single laptop for prediction.
+    Represents a single patient for prediction.
     """
 
-    Company: str
-    Product: str
-    TypeName: str
-    Inches: float
-    Ram: int
-    OS: str
-    Weight: float
-    Screen: str
-    ScreenW: int
-    ScreenH: int
-    Touchscreen: int
-    IPSpanel: int
-    RetinaDisplay: int
-    CPU_company: str
-    CPU_freq: float
-    CPU_model: str
-    PrimaryStorage: int
-    SecondaryStorage: int
-    PrimaryStorageType: str
-    SecondaryStorageType: str
-    GPU_company: str
-    GPU_model: str
+    Age: int
+    Sex: str
+    ChestPainType: str
+    RestingBP: int
+    Cholesterol: int
+    FastingBS: int
+    RestingECG: str
+    MaxHR: int
+    ExerciseAngina: str
+    Oldpeak: float
+    ST_Slope: str
 
     def get_data_as_dataframe(self) -> pd.DataFrame:
         """
-        Convert input data into a pandas DataFrame.
+        Convert patient data into a pandas DataFrame.
         """
 
         try:
-            return pd.DataFrame(
-                {
-                    "Company": [self.Company],
-                    "Product": [self.Product],
-                    "TypeName": [self.TypeName],
-                    "Inches": [self.Inches],
-                    "Ram": [self.Ram],
-                    "OS": [self.OS],
-                    "Weight": [self.Weight],
-                    "Screen": [self.Screen],
-                    "ScreenW": [self.ScreenW],
-                    "ScreenH": [self.ScreenH],
-                    "Touchscreen": [self.Touchscreen],
-                    "IPSpanel": [self.IPSpanel],
-                    "RetinaDisplay": [self.RetinaDisplay],
-                    "CPU_company": [self.CPU_company],
-                    "CPU_freq": [self.CPU_freq],
-                    "CPU_model": [self.CPU_model],
-                    "PrimaryStorage": [self.PrimaryStorage],
-                    "SecondaryStorage": [self.SecondaryStorage],
-                    "PrimaryStorageType": [self.PrimaryStorageType],
-                    "SecondaryStorageType": [self.SecondaryStorageType],
-                    "GPU_company": [self.GPU_company],
-                    "GPU_model": [self.GPU_model],
-                }
-            )
+            custom_data_input_dict = {
+                "Age": [self.Age],
+                "Sex": [self.Sex],
+                "ChestPainType": [self.ChestPainType],
+                "RestingBP": [self.RestingBP],
+                "Cholesterol": [self.Cholesterol],
+                "FastingBS": [self.FastingBS],
+                "RestingECG": [self.RestingECG],
+                "MaxHR": [self.MaxHR],
+                "ExerciseAngina": [self.ExerciseAngina],
+                "Oldpeak": [self.Oldpeak],
+                "ST_Slope": [self.ST_Slope],
+            }
+
+            return pd.DataFrame(custom_data_input_dict)
 
         except Exception as e:
-            logger.exception("Failed to create DataFrame.")
+            logger.exception("Failed to create prediction dataframe.")
             raise CustomException(e, sys) from e

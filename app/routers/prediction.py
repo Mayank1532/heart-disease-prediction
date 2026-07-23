@@ -15,8 +15,12 @@ service = PredictionService()
 
 @router.post("/", response_model=PredictionResponse)
 def predict(request: PredictionRequest):
+
     data = CustomData(**request.model_dump())
 
     prediction = service.predict(data)
 
-    return PredictionResponse(predicted_price=prediction)
+    return PredictionResponse(
+        prediction=prediction,
+        diagnosis=("Heart Disease" if prediction == 1 else "No Heart Disease"),
+    )

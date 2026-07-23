@@ -57,23 +57,17 @@ class TrainingPipeline:
             logger.info("Starting Training Pipeline")
             logger.info("=" * 100)
 
-            raw_data_path = (
-                self.ingestion.initiate_data_ingestion()
-            )
+            raw_data_path = self.ingestion.initiate_data_ingestion()
 
             logger.info(
                 "Raw dataset available at: %s",
                 raw_data_path,
             )
 
-            transformation_artifact = (
-                self.transformation.initiate_data_transformation()
-            )
+            transformation_artifact = self.transformation.initiate_data_transformation()
 
-            trainer_artifact = (
-                self.trainer.initiate_model_trainer(
-                    transformation_artifact,
-                )
+            trainer_artifact = self.trainer.initiate_model_trainer(
+                transformation_artifact,
             )
 
             logger.info("=" * 100)
@@ -83,9 +77,7 @@ class TrainingPipeline:
             return trainer_artifact
 
         except Exception as e:
-            logger.exception(
-                "Training pipeline execution failed."
-            )
+            logger.exception("Training pipeline execution failed.")
             raise CustomException(e, sys) from e
 
 

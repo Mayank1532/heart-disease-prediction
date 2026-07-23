@@ -42,9 +42,7 @@ class DataIngestion:
                     self.config.raw_data_path,
                 )
             else:
-                logger.info(
-                    "Dataset already exists in raw directory. Skipping copy."
-                )
+                logger.info("Dataset already exists in raw directory. Skipping copy.")
 
             logger.info(f"Dataset copied successfully to: {self.config.raw_data_path}")
 

@@ -18,4 +18,5 @@ logging.basicConfig(
 )
 
 # Logger object to import throughout the project
-logger = logging.getLogger("MLLaptopPricePrediction")
+
+logger = logging.getLogger("HeartDiseasePrediction")
